@@ -1,1 +1,2276 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Navbar</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: #111827;
+            color: white;
+            padding: 10px 15px;
+
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* LEFT */
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* MENU BUTTON */
+        .menu-btn {
+            font-size: 26px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: 0.3s;
+            color: white;
+            background: transparent;
+        }
+
+        /* ACTIVE MENU BUTTON */
+        .menu-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* LOGO */
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+
+        /* SEARCH */
+        .search-box {
+            margin-left: auto;
+            margin-right: 80px;
+
+            /* this was change ofter the code  */
+            /* ✅ GAP ADDED HERE */
+            display: flex;
+        }
+
+        .search-box input {
+            width: 140px;
+            padding: 6px 10px;
+            border: none;
+            outline: none;
+            border-radius: 20px 0 0 20px;
+        }
+
+        .search-box button {
+            padding: 6px 10px;
+            border: none;
+            background: #3b82f6;
+            color: white;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+        }
+
+        /* RIGHT */
+        .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* BUTTON */
+        .btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .login {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .join {
+            background: #22c55e;
+            color: white;
+        }
+
+        /* MENU */
+        .menu {
+            position: absolute;
+            top: 70px;
+            left: 10px;
+            width: 280px;
+            background: #1f2937;
+            border-radius: 10px;
+            display: none;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: block;
+        }
+
+        /* MENU HEADER */
+        .menu-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border-bottom: 1px solid #374151;
+        }
+
+        /* MENU ITEMS */
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu li {
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .menu li:hover {
+            background: #374151;
+        }
+
+        /* SUBMENU */
+        .submenu {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .submenu li {
+            background: #374151;
+            margin-top: 5px;
+        }
+
+        /* MOBILE FIX */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+                margin: 8px 0;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+
+
+<div class="navbar">
+
+    <div class="left">
+        <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</div>
+        <div class="logo">MySite</div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button onclick="doSearch()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="right">
+        <i class="fa-solid fa-user"></i>
+        <button class="btn login">Login</button>
+        <button class="btn join">Join</button>
+    </div>
+
+</div>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+    <div class="menu-header">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>MySite</span>
+    </div>
+
+    <ul id="menuList"></ul>
+</div>
+
+<script>
+    const items = [
+        "Courses", "Services", "Home", "About", "Blog", "Contact", "Settings",
+        "Profile", "Dashboard", "Analytics", "Reports", "Users", "Messages",
+        "Notifications", "Support", "Help", "Careers", "Pricing", "Gallery",
+        "Projects", "Tasks", "Calendar", "Files", "Security", "Integrations"
+    ];
+
+    const menuList = document.getElementById("menuList");
+
+    items.forEach(item => {
+        let li = document.createElement("li");
+        li.innerHTML = `
+    <i class="fa fa-circle"></i> ${item}
+    <span style="float:right">▼</span>
+    <ul class="submenu">
+      <li>${item} 1</li>
+      <li>${item} 2</li>
+    </ul>
+  `;
+        li.onclick = function () { toggleSub(this); };
+        menuList.appendChild(li);
+    });
+
+    /* MENU TOGGLE */
+    function toggleMenu() {
+        let menu = document.getElementById("menu");
+        let btn = document.getElementById("menuBtn");
+
+        menu.classList.toggle("active");
+        btn.classList.toggle("active");
+
+        btn.innerHTML = menu.classList.contains("active") ? "✖" : "☰";
+    }
+
+    /* SUBMENU */
+    function toggleSub(el) {
+        let sub = el.querySelector(".submenu");
+        sub.style.display = sub.style.display === "block" ? "none" : "block";
+    }
+
+    /* SEARCH */
+    function doSearch() {
+        let val = document.getElementById("searchInput").value.trim();
+        alert(val ? "Searching: " + val : "Enter something");
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f7f6;
+    }
+
+    /* NAVBAR */
+    .secondary-nav {
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    /* MENU ROW */
+    .nav-list {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ITEM */
+    .nav-item {
+        position: relative;
+    }
+
+    /* LABEL LOOK */
+    .nav-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px 18px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        user-select: none;
+        transition: 0.3s;
+    }
+
+    .nav-label:hover {
+        color: #007bff;
+    }
+
+    /* ARROW */
+    .chevron {
+        font-size: 10px;
+        transition: 0.3s;
+    }
+
+    /* ROTATE ON HOVER */
+    .nav-item:hover .chevron {
+        transform: rotate(180deg);
+    }
+
+    /* ========================= */
+    /* DROPDOWN (HOVER MAGIC) */
+    /* ========================= */
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* OPEN ON HOVER */
+    .nav-item:hover .dropdown-menu {
+        display: block;
+    }
+
+    /* ========================= */
+    /* 4 COLUMN GRID */
+    /* ========================= */
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .grid-container a {
+        text-decoration: none;
+        color: #444;
+        background: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+
+    .grid-container a:hover {
+        background: #e6f0ff;
+        color: #007bff;
+    }
+
+    /* ========================= */
+    /* RESPONSIVE */
+    /* ========================= */
+    @media (max-width: 900px) {
+
+        .nav-list {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dropdown-menu {
+            position: fixed;
+            top: 70px;
+            left: 5%;
+            width: 90%;
+            transform: none;
+        }
+
+        .grid-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 500px) {
+        .grid-container {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .nav-label {
+            font-size: 13px;
+            padding: 12px;
+        }
+    }
+</style>
+
+
+<nav class="secondary-nav">
+
+    <div class="nav-list">
+
+        <!-- STATE BOOKS -->
+        <div class="nav-item">
+            <div class="nav-label">
+                State Books <span class="chevron">▼</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <div class="grid-container">
+                    <a href="Bihar.html">Bihar</a>
+                    <a href="#">UP</a>
+                    <a href="#">MP</a>
+                    <a href="#">Delhi</a>
+                    <a href="#">Punjab</a>
+                    <a href="#">Gujarat</a>
+                    <a href="#">Assam</a>
+                    <a href="#">Kerala</a>
+                    <a href="#">TN</a>
+                    <a href="#">Odisha</a>
+                    <a href="#">WB</a>
+                    <a href="#">Haryana</a>
+                    <a href="#">Goa</a>
+                    <a href="#">JK</a>
+                    <a href="#">Tripura</a>
+                    <a href="#">Manipur</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NCERT -->
+        <div class="nav-item">
+            <div class="nav-label">
+                NCERT <span class="chevron">▼</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <div class="grid-container">
+                    <a href="Class 12.html">Class 12</a>
+                    <a href="#">Class 11</a>
+                    <a href="#">Class 10</a>
+                    <a href="#">Class 9</a>
+                    <a href="#">Class 8</a>
+                    <a href="#">Class 7</a>
+                    <a href="#">Class 6</a>
+                    <a href="#">Class 5</a>
+                    <a href="#">Class 4</a>
+                    <a href="#">Class 3</a>
+                    <a href="#">Class 2</a>
+                    <a href="#">Class 1</a>
+                    <a href="#">Solutions</a>
+                    <a href="#">Notes</a>
+                    <a href="#">Books PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- JEE -->
+        <div class="nav-item">
+            <div class="nav-label">
+                JEE <span class="chevron">▼</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <div class="grid-container">
+                    <a href="#">Mains</a>
+                    <a href="#">Advanced</a>
+                    <a href="#">Physics</a>
+                    <a href="#">Chemistry</a>
+                    <a href="#">Maths</a>
+                    <a href="#">Mock Test</a>
+                    <a href="#">Syllabus</a>
+                    <a href="#">Cutoff</a>
+                    <a href="#">PYQ</a>
+                    <a href="#">Revision</a>
+                    <a href="#">Formula</a>
+                    <a href="#">Results</a>
+                    <a href="#">Strategy</a>
+                    <a href="#">Books</a>
+                    <a href="#">News</a>
+                    <a href="#">Updates</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background-color: #f7f9fc;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Left Side Text Styling */
+    .text-section {
+        flex: 1;
+        padding-right: 40px;
+    }
+
+    .text-section h1 {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .text-section h1 span {
+        color: #0066cc;
+        text-decoration: underline;
+    }
+
+    .text-section p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+        color: #666;
+    }
+
+    .text-section .trusted {
+        color: #007bff;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    /* Right Side Carousel Styling */
+    .carousel-section {
+        flex: 1.5;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    .carousel-container {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+        min-width: 100%;
+    }
+
+    .carousel-slide img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Carousel Navigation Buttons */
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        z-index: 10;
+    }
+
+    .prev-btn {
+        left: 10px;
+    }
+
+    .next-btn {
+        right: 10px;
+    }
+</style>
+
+
+<div class="container">
+    <!-- Left Side: Text Content -->
+    <div class="text-section">
+        <h1>India’s <span>#1</span> Online Learning Platform</h1>
+        <p>Free online access to NCERT textbook & more.</p>
+        <p><a href="#" class="trusted">Trusted by 2Cr+ USERS</a></p>
+    </div>
+
+    <!-- Right Side: Automatic Image Carousel -->
+    <div class="carousel-section">
+        <button class="carousel-btn prev-btn" id="prevBtn">&#10094;</button>
+        <button class="carousel-btn next-btn" id="nextBtn">&#10095;</button>
+
+        <div class="carousel-container" id="carouselContainer">
+            <!-- Slide 1: Using the provided image -->
+            <div class="carousel-slide">
+                <img src="1.png" class="d-block w-100" alt="Self Studies - CBSE Sample Papers">
+            </div>
+            <!-- Slide 2: Generic Study Image -->
+            <div class="carousel-slide">
+                <img src="2.png" class="d-block w-100
+                    alt=" Online Study Resources">
+            </div>
+            <!-- Slide 3: Exam Prep Image -->
+            <div class="carousel-slide">
+                <img src="3.png" class="d-block w-100
+                    alt=" Exam Preparation Guide">
+            </div>
+            <!-- Slide 4: Career Guidance Image -->
+            <div class="carousel-slide">
+                <img src="4.png" class="d-block w-100
+                    alt=" Career Guidance Session">
+            </div>
+            <!-- Slide 5: Student Learning Image -->
+            <div class="carousel-slide">
+                <img src="5.png" class="d-block w-100
+                    alt=" Student Active Learning">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('carouselContainer');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let counter = 0;
+    const size = slides[0].clientWidth;
+
+    // Function to move the slide
+    function updateSlide() {
+        container.style.transition = "transform 0.5s ease-in-out";
+        container.style.transform = 'translateX(' + (-size * counter) + 'px)';
+    }
+
+    // Automatic Sliding Function
+    function startAutoSlide() {
+        setInterval(() => {
+            if (counter >= slides.length - 1) {
+                counter = 0; // Reset to the first slide
+            } else {
+                counter++;
+            }
+            updateSlide();
+        }, 5000); // Change image every 5 seconds (5000ms)
+    }
+
+    // Manual Navigation: Next Button
+    nextBtn.addEventListener('click', () => {
+        if (counter >= slides.length - 1) {
+            counter = 0;
+        } else {
+            counter++;
+        }
+        updateSlide();
+    });
+
+    // Manual Navigation: Previous Button
+    prevBtn.addEventListener('click', () => {
+        if (counter <= 0) {
+            counter = slides.length - 1;
+        } else {
+            counter--;
+        }
+        updateSlide();
+    });
+
+    // Start automatic sliding when the page loads
+    startAutoSlide();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8;
+        padding: 0px;
+    }
+
+    /* Container Styling */
+    .ticker-wrapper {
+        display: flex;
+        align-items: center;
+        background-color: #1a2344;
+        /* Dark Navy from image */
+        height: 60px;
+        border-radius: 30px;
+        overflow: hidden;
+        /* Keeps the moving text inside */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+
+    /* Static Label Section */
+    .ticker-label {
+        background-color: #ffb423;
+        /* Bright Yellow/Orange */
+        color: #1a2344;
+        padding: 0 25px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        font-size: 18px;
+        white-space: nowrap;
+        z-index: 10;
+        /* Keeps it above the moving text */
+        border-radius: 30px 0 0 30px;
+        border-right: 2px solid #1a2344;
+    }
+
+    /* Moving Text Container */
+    .ticker-scroll {
+        display: flex;
+        white-space: nowrap;
+        padding-left: 20px;
+        animation: scroll-left 40s linear infinite;
+    }
+
+    /* PAUSE ON HOVER LOGIC */
+    .ticker-wrapper:hover .ticker-scroll {
+        animation-play-state: paused;
+        cursor: pointer;
+    }
+
+    .ticker-item {
+        display: flex;
+        align-items: center;
+        color: #ffffff;
+        font-size: 15px;
+        padding: 0 30px;
+    }
+
+    /* Dot Separator */
+    .ticker-item::before {
+        content: "●";
+        color: #ffb423;
+        margin-right: 15px;
+        font-size: 12px;
+    }
+
+    .icon {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+
+    /* Animation */
+    @keyframes scroll-left {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+
+        /* We use -50% because we will duplicate the content for a seamless loop */
+    }
+
+    .mithun {
+        padding: 0 50px;
+        /* only left & right */
+    }
+</style>
+
+
+
+<div class="mithun">
+    <div class="ticker-wrapper">
+        <div class="ticker-label">Latest Updates</div>
+
+        <div class="ticker-scroll">
+            <!-- 10 Unique Items -->
+            <div class="ticker-item"><span class="icon">📢</span> Class 12 important questions uploaded
+            </div>
+            <div class="ticker-item"><span class="icon">📘</span> Practical viva material available</div>
+            <div class="ticker-item"><span class="icon">📚</span> Hindi & English notes updated</div>
+            <div class="ticker-item"><span class="icon">📝</span> JEE Mains 2026 Sample Papers</div>
+            <div class="ticker-item"><span class="icon">🎓</span> Scholarship form deadline extended</div>
+            <div class="ticker-item"><span class="icon">💻</span> New Coding Bootcamp starting Monday</div>
+            <div class="ticker-item"><span class="icon">🏆</span> Topper interview series live now</div>
+            <div class="ticker-item"><span class="icon">🔬</span> Physics Lab manual PDF added</div>
+            <div class="ticker-item"><span class="icon">🌍</span> Geography map work practice set</div>
+            <div class="ticker-item"><span class="icon">⏰</span> NEET Exam schedule released</div>
+
+            <!-- Duplicated content for seamless looping -->
+            <div class="ticker-item"><span class="icon">📢</span> Class 12 important questions uploaded
+            </div>
+            <div class="ticker-item"><span class="icon">📘</span> Practical viva material available</div>
+            <div class="ticker-item"><span class="icon">📚</span> Hindi & English notes updated</div>
+            <div class="ticker-item"><span class="icon">📝</span> JEE Mains 2026 Sample Papers</div>
+            <div class="ticker-item"><span class="icon">🎓</span> Scholarship form deadline extended</div>
+            <div class="ticker-item"><span class="icon">💻</span> New Coding Bootcamp starting Monday</div>
+            <div class="ticker-item"><span class="icon">🏆</span> Topper interview series live now</div>
+            <div class="ticker-item"><span class="icon">🔬</span> Physics Lab manual PDF added</div>
+            <div class="ticker-item"><span class="icon">🌍</span> Geography map work practice set</div>
+            <div class="ticker-item"><span class="icon">⏰</span> NEET Exam schedule released</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: black;
+        margin: 0;
+        padding: 0px;
+
+    }
+
+    /* Full Navigation Bar with Arrows */
+    .nav-container {
+        display: flex;
+        align-items: center;
+        background: #252525;
+        padding: 10px 20px;
+        border-radius: 50px;
+        margin-bottom: 40px;
+        border: 1px solid #333;
+    }
+
+    .nav-scroll {
+        display: flex;
+        overflow-x: auto;
+        gap: 12px;
+        flex-grow: 1;
+        padding: 0 15px;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .nav-scroll::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+    }
+
+    .arrow {
+        color: #888;
+        font-size: 18px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nav-pill {
+        background: #ffffff;
+        color: #121212;
+        padding: 10px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .nav-pill.active {
+        background: #d4af37;
+        /* Electric Gold */
+        color: #ffffff;
+    }
+
+    /* Header Section */
+    .intro-text {
+        max-width: 950px;
+        margin-bottom: 35px;
+    }
+
+    .intro-text h2 {
+        font-size: 22px;
+        margin-bottom: 12px;
+        color: #0f0e0e;
+    }
+
+    .intro-text p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #000000;
+    }
+
+    .read-more {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    /* Card Grid */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .card-link {
+        text-decoration: none;
+    }
+
+    .resource-card {
+        background: #ffffff;
+        border-radius: 6px;
+        padding: 25px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 60px;
+    }
+
+    .resource-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+    }
+
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        border: 2px solid #d4af37;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+    }
+
+    .card-title {
+        color: #1a1a1a;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1100px) {
+        .card-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .card-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .mithun1 {
+
+        padding: 50px 50px 50px 50px;
+        /* top right bottom left */
+    }
+</style>
+</head>
+
+<body>
+    <div class="mithun1">
+        <!-- Top Navigation Section -->
+        <div class="nav-container">
+            <span class="arrow">&lt;</span>
+            <div class="nav-scroll">
+                <a href="https://example.com/ncert" target="_blank" class="nav-pill active">NCERT Books & Solutions</a>
+                <a href="https://example.com/state" target="_blank" class="nav-pill">State Books</a>
+                <a href="https://example.com/solutions" target="_blank" class="nav-pill">Books & Solutions</a>
+                <a href="https://example.com/cbse" target="_blank" class="nav-pill">CBSE</a>
+                <a href="https://example.com/cisce" target="_blank" class="nav-pill">CISCE</a>
+                <a href="https://example.com/jee" target="_blank" class="nav-pill">JEE</a>
+                <a href="https://example.com/neet" target="_blank" class="nav-pill">NEET</a>
+                <a href="https://example.com/cuet" target="_blank" class="nav-pill">CUET</a>
+            </div>
+            <span class="arrow">&gt;</span>
+        </div>
+
+        <!-- Intro Text Section -->
+        <div class="intro-text">
+            <h2>NCERT Books & Solutions</h2>
+            <p>
+                NCERT Books and Solutions can be of great use if you are trying to excel in your school exams. The
+                journey starts right from when you step into 1st class as every class holds great value as you grow.
+                Although higher classes students such as Class 10th to 12th should have a better knowledge of all the
+                concepts. <a href="#" target="_blank" class="read-more">Read More...</a>
+            </p>
+        </div>
+
+        <!-- Content Grid - All items from image included -->
+        <div class="card-grid">
+            <!-- Row 1 -->
+            <a href="https://example.com/1" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Books 2022-23</div>
+                </div>
+            </a>
+            <a href="https://example.com/2" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Solutions</div>
+                </div>
+            </a>
+            <a href="https://example.com/3" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Notes</div>
+                </div>
+            </a>
+            <a href="https://example.com/4" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Exemplar Books</div>
+                </div>
+            </a>
+
+            <!-- Row 2 -->
+            <a href="https://example.com/5" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Exemplar Solution</div>
+                </div>
+            </a>
+            <a href="https://example.com/6" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">States UT Book</div>
+                </div>
+            </a>
+            <a href="https://example.com/7" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">School Kits & Lab Manual</div>
+                </div>
+            </a>
+            <a href="https://example.com/8" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Books 2021-22</div>
+                </div>
+            </a>
+
+            <!-- Row 3 (Ensuring nothing is missing from the screenshot) -->
+            <a href="https://example.com/9" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Books 2020-21</div>
+                </div>
+            </a>
+            <a href="https://example.com/10" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Book 2019-2020</div>
+                </div>
+            </a>
+            <a href="https://example.com/11" target="_blank" class="card-link">
+                <div class="resource-card">
+                    <div class="icon-box">📖</div>
+                    <div class="card-title">NCERT Book 2015-2016</div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f4f8;
+
+        }
+
+        .container-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 1100px;
+            padding: 60px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Left Side: Content */
+        .content-left {
+            flex: 1.2;
+            z-index: 5;
+        }
+
+        .title-text {
+            color: #333c4e;
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .brand-name {
+            color: #2d50ed;
+            font-size: 52px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        /* Anchor tags styled as buttons */
+        .social-btn {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #f2f2f2;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-btn i {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        /* Colors matched to Screenshot 2026-04-23 182231.png */
+        .fa-whatsapp {
+            color: #25D366;
+        }
+
+        .fa-telegram {
+            color: #0088cc;
+        }
+
+        .fa-facebook {
+            color: #1877F2;
+        }
+
+        .fa-instagram {
+            color: #E4405F;
+        }
+
+        .fa-pinterest {
+            color: #BD081C;
+        }
+
+        .fa-youtube {
+            color: #FF0000;
+        }
+
+        .fa-twitter {
+            color: #1DA1F2;
+        }
+
+        .fa-linkedin {
+            color: #0A66C2;
+        }
+
+        .social-btn span {
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .see-all-link {
+            grid-column: span 3;
+            color: #2d50ed;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* Right Side: Visuals */
+        .content-right {
+            flex: 1;
+            position: relative;
+            height: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 190px;
+            height: 380px;
+            background: #fff;
+            border: 8px solid #222;
+            border-radius: 30px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .phone-brand {
+            font-weight: 800;
+            color: #2d50ed;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+
+        .phone-icon-center {
+            margin-top: 80px;
+            font-size: 60px;
+            color: #2d50ed;
+        }
+
+        /* Floating "Extra" Icons around the mobile */
+        .floating-icon {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 11;
+            font-size: 18px;
+        }
+
+        /* Positions for floating icons */
+        .pos-1 {
+            top: 10%;
+            right: 15%;
+            color: #E4405F;
+        }
+
+        /* Instagram */
+        .pos-2 {
+            top: 25%;
+            left: 10%;
+            color: #1877F2;
+        }
+
+        /* Facebook */
+        .pos-3 {
+            bottom: 30%;
+            left: 0%;
+            color: #f39c12;
+        }
+
+        /* Message/Orange */
+        .pos-4 {
+            top: 40%;
+            right: 0%;
+            color: #1DA1F2;
+        }
+
+        /* Twitter */
+        .pos-5 {
+            bottom: 15%;
+            right: 10%;
+            color: #FF0000;
+        }
+
+        /* Youtube */
+
+        @media (max-width: 900px) {
+            .container-card {
+                flex-direction: column;
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .social-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .see-all-link {
+                grid-column: span 2;
+            }
+
+            .content-right {
+                margin-top: 60px;
+            }
+        }
+    </style>
+    </head>
+
+    <body>
+        <div class="mithun">
+            <div class="container-card">
+                <!-- Left text and buttons -->
+                <div class="content-left">
+                    <h1 class="title-text">Stay Connected<br>With</h1>
+                    <span class="brand-name">My Site</span>
+
+                    <div class="social-grid">
+                        <!-- All anchor tags for buttons -->
+                        <a href="https://wa.me/yourlink" class="social-btn"><i
+                                class="fab fa-whatsapp"></i><span>Whatsapp</span></a>
+                        <a href="https://t.me/yourlink" class="social-btn"><i
+                                class="fab fa-telegram"></i><span>Telegram</span></a>
+                        <a href="https://facebook.com/yourlink" class="social-btn"><i
+                                class="fab fa-facebook"></i><span>Facebook</span></a>
+                        <a href="https://instagram.com/yourlink" class="social-btn"><i
+                                class="fab fa-instagram"></i><span>Instagram</span></a>
+                        <a href="https://pinterest.com/yourlink" class="social-btn"><i
+                                class="fab fa-pinterest"></i><span>Pinterest</span></a>
+                        <a href="https://youtube.com/yourlink" class="social-btn"><i
+                                class="fab fa-youtube"></i><span>Youtube</span></a>
+                        <a href="https://twitter.com/yourlink" class="social-btn"><i
+                                class="fab fa-twitter"></i><span>Twitter</span></a>
+                        <a href="https://linkedin.com/yourlink" class="social-btn"><i
+                                class="fab fa-linkedin"></i><span>Linkedin</span></a>
+                        <a href="#" class="see-all-link">See All →</a>
+                    </div>
+                </div>
+
+                <!-- Right illustration with mobile and extra icons -->
+                <div class="content-right">
+                    <!-- The Hand (Simulated with a background shadow/shape if needed, but keeping it clean) -->
+                    <div class="phone-frame">
+                        <div class="phone-brand">My Site</div>
+                        <div class="phone-icon-center">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                    </div>
+
+                    <!-- The Extra Floating Icons -->
+                    <div class="floating-icon pos-1"><i class="fab fa-instagram"></i></div>
+                    <div class="floating-icon pos-2"><i class="fab fa-facebook-f"></i></div>
+                    <div class="floating-icon pos-3"><i class="fas fa-comment-dots"></i></div>
+                    <div class="floating-icon pos-4"><i class="fab fa-twitter"></i></div>
+                    <div class="floating-icon pos-5"><i class="fab fa-youtube"></i></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <style>
+            :root {
+                --primary-blue: #3b82f6;
+                --text-dark: #1e293b;
+                --text-gray: #64748b;
+                --bg-light: #f8fafc;
+                --card-orange: #f59e0b;
+                --card-green: #10b981;
+                --card-purple: #8b5cf6;
+            }
+
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f1f5f9;
+                margin: 0;
+
+            }
+
+            /* The Container Box */
+            .main-container {
+                background-color: white;
+                width: 100%;
+                max-width: 1100px;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                padding: 60px 20px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            }
+
+            /* Header Styling */
+            .section-header {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+
+            .section-header h2 {
+                font-size: 2.25rem;
+                color: var(--text-dark);
+                font-weight: 800;
+                margin: 0 0 15px 0;
+            }
+
+            .sub-heading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary-blue);
+                font-weight: 600;
+                font-size: 1.5rem;
+            }
+
+            .sub-heading::before,
+            .sub-heading::after {
+                content: "";
+                height: 2px;
+                width: 30px;
+                background-color: var(--primary-blue);
+                margin: 0 15px;
+                opacity: 0.6;
+            }
+
+            /* Grid Layout */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                padding: 10px;
+            }
+
+            /* Individual Card */
+            .stat-card {
+                background: #ffffff;
+                border: 1px solid #f1f5f9;
+                border-radius: 16px;
+                padding: 40px 20px;
+                text-align: center;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .stat-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+            }
+
+            .icon-wrapper {
+                width: 70px;
+                height: 70px;
+                margin: 0 auto 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+            }
+
+            .stat-value {
+                font-size: 2.75rem;
+                font-weight: 800;
+                margin: 10px 0;
+            }
+
+            .divider {
+                width: 45px;
+                height: 3px;
+                background: #e2e8f0;
+                margin: 20px auto;
+                border-radius: 10px;
+            }
+
+            .stat-label {
+                color: var(--text-gray);
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            /* Themed Variations */
+            .orange {
+                color: var(--card-orange);
+                background-color: #fff7ed;
+            }
+
+            .green {
+                color: var(--card-green);
+                background-color: #f0fdf4;
+            }
+
+            .purple {
+                color: var(--card-purple);
+                background-color: #f5f3ff;
+            }
+
+            .text-orange {
+                color: var(--card-orange);
+            }
+
+            .text-green {
+                color: var(--card-green);
+            }
+
+            .text-purple {
+                color: var(--card-purple);
+            }
+
+            /* Mobile Responsiveness */
+            @media (max-width: 900px) {
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                    max-width: 400px;
+                    margin: 0 auto;
+                }
+
+                .section-header h2 {
+                    font-size: 1.75rem;
+                }
+
+                .sub-heading {
+                    font-size: 1.25rem;
+                }
+            }
+
+
+            .mithun2 {
+                padding-left: 90px;
+                padding-right: 30px;
+                padding-top: 50px;
+            }
+        </style>
+        </head>
+
+        <body>
+            <div class="mithun2">
+                <div class="main-container">
+                    <div class="section-header">
+                        <h2>Our Numbers Speak For Us</h2>
+                        <div class="sub-heading">2Cr+ Trusted Student</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <!-- Card 1: Test Attempted -->
+                        <div class="stat-card">
+                            <div class="icon-wrapper orange">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2">
+                                    </path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                    <path d="M9 14l2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <div class="stat-value text-orange">1Cr+</div>
+                            <div class="divider"></div>
+                            <div class="stat-label">Test Attempted</div>
+                        </div>
+
+                        <!-- Card 2: Page Views -->
+                        <div class="stat-card">
+                            <div class="icon-wrapper green">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div class="stat-value text-green">3Cr+</div>
+                            <div class="divider"></div>
+                            <div class="stat-label">Monthly Page Views</div>
+                        </div>
+
+                        <!-- Card 3: App Downloads -->
+                        <div class="stat-card">
+                            <div class="icon-wrapper purple">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                </svg>
+                            </div>
+                            <div class="stat-value text-purple">1000K+</div>
+                            <div class="divider"></div>
+                            <div class="stat-label">App Download</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <style>
+                <!-- Font Awesome for Social Media Icons 
+                -->
+                /*
+                General
+                Reset
+                */
+                *
+                {
+                box-sizing:
+                border-box;
+                margin:
+                0;
+                padding:
+                0;
+                }
+                body
+                {
+                font-family:
+                'Segoe
+                UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+                background-color:
+                #f0f2f5;
+                /*
+                Light
+                grey
+                background
+                to
+                make
+                the
+                card
+                pop
+                */
+                line-height:
+                1.6;
+                }
+                /*
+                ---
+                CALL
+                TO
+                ACTION
+                SECTION
+                (Screenshot
+                2026-04-24
+                004614.png)
+                ---
+                */
+                .cta-section
+                {
+                padding:
+                60px
+                20px;
+                display:
+                flex;
+                justify-content:
+                center;
+                }
+                .cta-card
+                {
+                background-color:
+                #ffffff;
+                max-width:
+                850px;
+                width:
+                100%;
+                padding:
+                60px
+                40px;
+                border-radius:
+                15px;
+                text-align:
+                center;
+                box-shadow:
+                0
+                10px
+                40px
+                rgba(0,
+                0,
+                0,
+                0.05);
+                }
+                .cta-card
+                h2
+                {
+                color:
+                #2d3e50;
+                font-size:
+                40px;
+                font-weight:
+                600;
+                margin-bottom:
+                15px;
+                }
+                .cta-card
+                p
+                {
+                color:
+                #666;
+                font-size:
+                18px;
+                margin-bottom:
+                30px;
+                max-width:
+                600px;
+                margin-left:
+                auto;
+                margin-right:
+                auto;
+                }
+                .button-group
+                {
+                display:
+                flex;
+                justify-content:
+                center;
+                gap:
+                15px;
+                }
+                .btn
+                {
+                padding:
+                12px
+                35px;
+                border-radius:
+                30px;
+                font-size:
+                16px;
+                font-weight:
+                500;
+                text-decoration:
+                none;
+                transition:
+                all
+                0.3s
+                ease;
+                display:
+                inline-block;
+                }
+                .btn-login
+                {
+                background-color:
+                transparent;
+                color:
+                #888;
+                border:
+                1px
+                solid
+                #ccc;
+                }
+                .btn-login:hover
+                {
+                border-color:
+                #3b82f6;
+                color:
+                #3b82f6;
+                }
+                .btn-signup
+                {
+                background-color:
+                #3b82f6;
+                color:
+                #ffffff;
+                border:
+                1px
+                solid
+                #3b82f6;
+                }
+                .btn-signup:hover
+                {
+                background-color:
+                #2563eb;
+                box-shadow:
+                0
+                5px
+                15px
+                rgba(59,
+                130,
+                246,
+                0.3);
+                }
+                /*
+                ---
+                FOOTER
+                SECTION
+                (Screenshot
+                2026-04-24
+                004019.png)
+                ---
+                */
+                .site-footer
+                {
+                background-color:
+                #0f0f0f;
+                color:
+                #ffffff;
+                padding:
+                60px
+                20px
+                20px;
+                margin-top:
+                40px;
+                }
+                .footer-wrapper
+                {
+                max-width:
+                1200px;
+                margin:
+                0
+                auto;
+                display:
+                flex;
+                flex-wrap:
+                wrap;
+                gap:
+                40px;
+                justify-content:
+                space-between;
+                }
+                .footer-col
+                {
+                flex:
+                1;
+                min-width:
+                280px;
+                }
+                /*
+                Custom
+                Logo
+                Edit
+                via
+                CSS
+                */
+                .logo
+                {
+                font-size:
+                28px;
+                font-weight:
+                700;
+                margin-bottom:
+                20px;
+                display:
+                inline-block;
+                text-decoration:
+                none;
+                }
+                .logo-blue
+                {
+                color:
+                #4385f4;
+                }
+                .logo-green
+                {
+                color:
+                #34a853;
+                }
+                .logo-dot-com
+                {
+                color:
+                #666;
+                font-size:
+                16px;
+                font-weight:
+                normal;
+                }
+                .footer-col
+                p
+                {
+                font-size:
+                14px;
+                color:
+                #bbbbbb;
+                margin-bottom:
+                15px;
+                }
+                .footer-col
+                h3
+                {
+                font-size:
+                18px;
+                margin-bottom:
+                25px;
+                color:
+                #ffffff;
+                }
+                .footer-links
+                {
+                list-style:
+                none;
+                }
+                .footer-links
+                li
+                {
+                margin-bottom:
+                12px;
+                }
+                .footer-links
+                a
+                {
+                color:
+                #34a853;
+                /*
+                The
+                signature
+                green
+                from
+                your
+                site
+                */
+                text-decoration:
+                none;
+                transition:
+                0.3s;
+                }
+                .footer-links
+                a:hover
+                {
+                color:
+                #ffffff;
+                text-decoration:
+                underline;
+                }
+                .email-link
+                {
+                color:
+                #34a853;
+                text-decoration:
+                none;
+                font-weight:
+                bold;
+                }
+                /*
+                Social
+                Media
+                Icons
+                */
+                .social-container
+                {
+                display:
+                flex;
+                flex-wrap:
+                wrap;
+                gap:
+                10px;
+                margin-top:
+                15px;
+                }
+                .social-icon
+                {
+                width:
+                35px;
+                height:
+                35px;
+                display:
+                flex;
+                align-items:
+                center;
+                justify-content:
+                center;
+                border-radius:
+                6px;
+                color:
+                #fff;
+                text-decoration:
+                none;
+                font-size:
+                18px;
+                transition:
+                transform
+                0.2s;
+                }
+                .social-icon:hover
+                {
+                transform:
+                translateY(-3px);
+                }
+                /*
+                Icon
+                Brand
+                Colors
+                */
+                .whatsapp
+                {
+                background-color:
+                #25D366;
+                }
+                .telegram
+                {
+                background-color:
+                #0088cc;
+                }
+                .facebook
+                {
+                background-color:
+                #1877F2;
+                }
+                .linkedin
+                {
+                background-color:
+                #0077b5;
+                }
+                .pinterest
+                {
+                background-color:
+                #bd081c;
+                }
+                .instagram
+                {
+                background-color:
+                #e4405f;
+                }
+                .youtube
+                {
+                background-color:
+                #ff0000;
+                }
+                .twitter
+                {
+                background-color:
+                #1DA1F2;
+                }
+                /*
+                Copyright
+                Bar
+                */
+                .footer-bottom
+                {
+                margin-top:
+                50px;
+                padding-top:
+                25px;
+                border-top:
+                1px
+                solid
+                #222;
+                text-align:
+                center;
+                color:
+                #888;
+                font-size:
+                14px;
+                }
+                /*
+                ---
+                RESPONSIVE
+                SETTINGS
+                ---
+                */
+                @media
+                (max-width:
+                768px)
+                {
+                .cta-card
+                h2
+                {
+                font-size:
+                30px;
+                }
+                .button-group
+                {
+                flex-direction:
+                column;
+                }
+                .btn
+                {
+                width:
+                100%;
+                }
+                .footer-wrapper
+                {
+                flex-direction:
+                column;
+                }
+                .footer-col
+                {
+                min-width:
+                100%;
+                }
+                }
+            </style>
+            </head>
+
+            <body>
+
+                <!-- Top Card Section -->
+                <section class="cta-section">
+                    <div class="cta-card">
+                        <h2>Want Free Study Materials?</h2>
+                        <p>Sign Up/Log in to get FREE study materials for your class along with the MCQs for free of
+                            cost.</p>
+                        <div class="button-group">
+                            <a href="/login" class="btn btn-login">Login</a>
+                            <a href="/signup" class="btn btn-signup">Sign Up</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer Section -->
+                <footer class="site-footer">
+                    <div class="footer-wrapper">
+                        <!-- Brand Column -->
+                        <div class="footer-col">
+                            <a href="/" class="logo">
+                                <span class="logo-blue">Self</span><span class="logo-green">Studys</span><span
+                                    class="logo-dot-com">.com</span>
+                            </a>
+                            <p>We are providing something unique, useful and most importantly fun. By giving students a
+                                tool to find instant solutions to their doubts, we’re trying to make every student
+                                self-sufficient in practicing & completing their homework.</p>
+                            <a href="mailto:hello@selfstudys.com" class="email-link">hello@selfstudys.com</a>
+                        </div>
+
+                        <!-- Links Column -->
+                        <div class="footer-col">
+                            <h3>Quick Links</h3>
+                            <ul class="footer-links">
+                                <li><a href="/about">About</a></li>
+                                <li><a href="/privacy-policy">Privacy Policy</a></li>
+                                <li><a href="/social-media">Social Media</a></li>
+                                <li><a href="/contact">Contact</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Social Media Column -->
+                        <div class="footer-col">
+                            <h3>Follow Us</h3>
+                            <p>We share educational news, study materials, result, etc. on Social media platforms.
+                                Follow us on:</p>
+                            <div class="social-container">
+                                <!-- Added actual anchor tags for links -->
+                                <a href="https://wa.me/yournumber" class="social-icon whatsapp" title="WhatsApp"><i
+                                        class="fab fa-whatsapp"></i></a>
+                                <a href="https://t.me/yourchannel" class="social-icon telegram" title="Telegram"><i
+                                        class="fab fa-telegram-plane"></i></a>
+                                <a href="https://facebook.com/yourpage" class="social-icon facebook" title="Facebook"><i
+                                        class="fab fa-facebook-f"></i></a>
+                                <a href="https://linkedin.com/company/yourpage" class="social-icon linkedin"
+                                    title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="https://pinterest.com/yourprofile" class="social-icon pinterest"
+                                    title="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="https://instagram.com/yourprofile" class="social-icon instagram"
+                                    title="Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="https://youtube.com/yourchannel" class="social-icon youtube" title="YouTube"><i
+                                        class="fab fa-youtube"></i></a>
+                                <a href="https://twitter.com/yourprofile" class="social-icon twitter" title="Twitter"><i
+                                        class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer-bottom">
+                        <p>Copyright © 2026 All Rights Reserved, selfstudys.com</p>
+                    </div>
+                </footer>
+
+            </body>
+
+</html>
+</body>
+
+</html>

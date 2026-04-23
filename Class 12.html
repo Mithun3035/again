@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT Solutions 2025-26</title>
+    <style>
+        :root {
+            --primary-bg: #f4f8fb;
+            --dark-banner: #2d2e32;
+            --green-accent: #0ebc7e;
+            --blue-accent: #3182ce;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --border-color: #cbd5e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Hero Banner (from Screenshot 2026-04-24 011741.png) */
+        .hero-card {
+            background-color: var(--dark-banner);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .hero-card h1 {
+            font-size: 32px;
+            margin: 0 0 35px 0;
+        }
+
+        .hero-card p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .arrow-button {
+            position: absolute;
+            right: 30px;
+            bottom: 40px;
+            background: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chevron {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 4px;
+            transform: rotate(-45deg);
+        }
+
+        .footer-note {
+            position: absolute;
+            bottom: -25px;
+            right: 0;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* Content Section */
+        .content-section {
+            margin-top: 50px;
+        }
+
+        .content-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .content-section p {
+            line-height: 1.6;
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+
+        .read-more {
+            color: var(--blue-accent);
+            text-decoration: underline;
+            display: block;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Buttons & Tabs */
+        .label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .language-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .btn-lang {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #e2e8f0;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .btn-lang.active {
+            background-color: var(--green-accent);
+            color: white;
+            border: none;
+        }
+
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .tabs-wrapper {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs-wrapper::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: 10px 22px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: white;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background-color: var(--blue-accent);
+            color: white;
+            border-color: var(--blue-accent);
+        }
+
+        /* Search Bar (from Screenshot 2026-04-24 012356.png) */
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            max-width: 450px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            font-size: 15px;
+        }
+
+        /* Subjects List */
+        .subject-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .subject-card:hover {
+            background: #fcfcfc;
+        }
+
+        /* Interactive Menu */
+        .action-menu {
+            display: none; /* Controlled by JS */
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-see {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-download {
+            background: var(--blue-accent);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Banner -->
+        <div class="hero-card">
+            <h1>Free for students</h1>
+            <p>Start with lecture notes, finish ready for tests</p>
+            <div class="arrow-button">
+                <span class="chevron"></span>
+            </div>
+            <div class="footer-note">Google NotebookLM</div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="content-section">
+            <h2>NCERT Solutions 2025-26</h2>
+            <p>The NCERT solutions 2025-26 are available on the digital platform in PDF format. These are prepared on the basis of the latest academic</p>
+            <a href="#" class="read-more">Read More</a>
+            
+            <p class="label">Select Language</p>
+            <div class="language-buttons">
+                <button class="btn-lang active">english</button>
+                <button class="btn-lang">hindi</button>
+            </div>
+        </div>
+
+        <!-- Horizontal Class Slider -->
+        <div class="tabs-container">
+            <div class="tabs-wrapper">
+                <div class="tab active">12th</div>
+                <div class="tab">11th</div>
+                <div class="tab">10th</div>
+                <div class="tab">9th</div>
+                <div class="tab">8th</div>
+                <div class="tab">7th</div>
+                <div class="tab">6th</div>
+                <div class="tab">5th</div>
+                <div class="tab">4th</div>
+                <div class="tab">3rd</div>
+                <div class="tab">2nd</div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search Your Subject Here">
+            </div>
+        </div>
+
+        <!-- Subjects List -->
+        <div class="subjects-list">
+            <!-- MATHS CARD WITH CLICK ACTION -->
+            <div class="subject-card" onclick="toggleMathMenu()">
+                <span>1. Maths</span>
+                <div id="math-actions" class="action-menu">
+                    <button class="action-btn btn-see" onclick="event.stopPropagation(); alert('Opening Viewer...')">See</button>
+                    <!-- Link to your specific file -->
+                    <a href="mithun.pdf" download="mithun.pdf" class="action-btn btn-download" onclick="event.stopPropagation();">Download</a>
+                </div>
+            </div>
+
+            <div class="subject-card"><span>2. Physics</span></div>
+            <div class="subject-card"><span>3. Chemistry</span></div>
+            <div class="subject-card"><span>4. Biology</span></div>
+            <div class="subject-card"><span>5. Accountancy</span></div>
+            <div class="subject-card"><span>6. Business Studies</span></div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMathMenu() {
+            const menu = document.getElementById('math-actions');
+            if (menu.style.display === "flex") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "flex";
+            }
+        }
+    </script>
+
+</body>
+</html>
